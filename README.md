@@ -6,10 +6,10 @@ Javascript API to obtain the `CreditCardToken`
 
 Import the following script:
 ```html
-<script src="https://ecomm.sella.it/pagam/JavaScript/js_GestPay.js" type="text/javascript"></script>
+<script src="https://..../tokenizeCard.js" type="text/javascript"></script>
 ```
 
-
+Create a function where you handle the received credit card token:
 ```javascript
 // usage:
 function handleRequest(CreditCardToken) {
@@ -17,7 +17,13 @@ function handleRequest(CreditCardToken) {
     console.log(CreditCardToken);
 }
 
-tokanizeCard(apiKey, environment, cardDetails, handleRequest);
+
+tokanizeCard({
+    "apiKey": [apikey string], 
+    "environment": [environment string],
+    "cardDetails": [card details object],
+    "handleRequest": 
+});
 ```
 
 | Parameter         | Type          | Possible Values                       | Description                                   |
