@@ -4,11 +4,12 @@
 | :---        |    :----:   |          ---: |
 | Header      | Title       | Here's this   |
 | Paragraph   | Text        | And more      |
-|             | ```json
+|             | 
+```json
 {
   "firstName": "John",
   "lastName": "Smith",
   "age": 25
 }
-``` |   |
+```
 | a |   -   |   -   |
