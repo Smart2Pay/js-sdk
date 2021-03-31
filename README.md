@@ -1,8 +1,19 @@
 # js-sdk
 
+Javascript API to obtain the `CreditCardToken`
+
+## Installation
+
+Import the following script:
+```html
+<script src="https://ecomm.sella.it/pagam/JavaScript/js_GestPay.js" type="text/javascript"></script>
+```
+
+
 ```javascript
 // usage:
 function handleRequest(CreditCardToken) {
+    // use received 'CreditCardToken'
     console.log(CreditCardToken);
 }
 
