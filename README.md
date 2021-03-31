@@ -1,10 +1,10 @@
 # js-sdk
 
-| Syntax      | Description | Test Text     |
-| :---        |    :----:   |          ---: |
-| Header      | Title       | Here's this   |
-| Paragraph   | Text        | And more      |
-|             | 
+| Parameter         | Mandatory         | Type      | Possible Values                       | Description               |
+| :---              |    :----:         | :---:     | :---                                  |                           |
+| `environment`     | **yes**           | strign    | **'DEV'** \| **'TEST'** \| **'LIVE'** | select the environment <br /><ul><li>**DEV** - `http://localhost/v1/card/authenticate`</li><li>**TEST** - `https://securetest.smart2pay.com/v1/card/authenticate`</li><li>**LIVE** - `https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
+
+
 ```json
 {
   "firstName": "John",
@@ -12,4 +12,3 @@
   "age": 25
 }
 ```
-| a |   -   |   -   |
