@@ -4,10 +4,12 @@ Javascript API to obtain the `CreditCardToken`
 
 ## Installation
 
-Import the following script:
+Import the following script that will make available `tokanizeCard()`:
 ```html
 <script src="https://..../tokenizeCard.js" type="text/javascript"></script>
 ```
+
+## Usage
 
 Create a function where you handle the received credit card token:
 ```javascript
@@ -16,13 +18,24 @@ function handleRequest(CreditCardToken) {
     // use received 'CreditCardToken'
     console.log(CreditCardToken);
 }
+```
 
+Create a function to handle any received errors:
+```javascript
+function handleError(HttpStatusCode, errorText) {
+    // handle error
+    console.log(HttpStatusCode, errorText);
+}
+```
 
+Use `tokanizeCard()` to send required data and make `CreditCardToken` to 
+```json
 tokanizeCard({
     "apiKey": [apikey string], 
     "environment": [environment string],
     "cardDetails": [card details object],
-    "handleRequest": 
+    "handleRequest": [handleRequest callback],
+    "handleError": [handleError callback],
 });
 ```
 
@@ -32,8 +45,9 @@ tokanizeCard({
 | `environment`     | string        | **'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
 | `cardDetails`     | JSON object   | e.g.:  | card authentication details in JSON format |
 | `handleRequest`   | JavaScript function   |   | a Javascript function that will receive `CreditCardToken` as a parameter |
+| `handleError`     | JavaScript function   |   | a Javascript function that will receive an error code: `HttpStatusCode` and `errorText` parameters |
 
-
+Sample card details object:
 ```json
 {
     "CardAuthentication": {
@@ -54,13 +68,5 @@ tokanizeCard({
             "SecurityCode": "312"
         }
     }
-}
-```
-
-```json
-{
-  "firstName": "John",
-  "lastName": "Smith",
-  "age": 25
 }
 ```

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+function tokenizeCard(paramsObj) {
+    "use strict";
+
+    var apiKey = paramsObj.apiKey;
+    var environment = paramsObj.environment;
+    var postData = paramsObj.cardDetails;
+    var callback = paramsObj.handleRequest;
+    var errCallback = paramsObj.handleError;
+
+    var url = '';
+    switch (environment) {
+        case '--':
+            url = 'https://jsonplaceholder.typicode.com/posts/1';
+            break;
+        case 'DEV':
+        case 'dev':
+            url = 'http://localhost/v1/card/authenticate';
+            break;
+        case 'LIVE':
+        case 'live':
+            url = 'https://secure.smart2pay.com/v1/card/authenticate';
+            break;
+        case 'TEST':
+        case 'test':
+        default:
+            url = 'https://securetest.smart2pay.com/v1/card/authenticate';
+            break;
+    }
+
+    var req = new XMLHttpRequest();
+    if (!req) {
+        errCallback(400, 'XMLHttpRequest() object missing! Is JavaScript enabled?');
+        return;
+    }
+    req.open('POST', url, true);
+    req.setRequestHeader('Authorization', 'Basic ' + apiKey);
+    if (postData)
+        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    req.onreadystatechange = function () {
+        if (req.readyState != XMLHttpRequest.DONE) return;
+
+        if ([200, 201].indexOf(req.status) === -1) {
+            errCallback(req.status, 'HTTP error...');
+            return;
+        }
+
+        callback(JSON.parse(req.responseText).CardAuthentication.CreditCardToken.Value);
+    }
+    if (req.readyState == 4) return;
+    req.send(postData);
+};
+
+
+
+// usage:
+function handleRequest(CreditCardToken) {
+    // use received 'CreditCardToken'
+    console.log(CreditCardToken);
+}
+
+function handleError(HttpStatusCode, errorText) {
+    // handle error
+    console.log(HttpStatusCode, errorText);
+}
+
+    let x = {
+        "CardAuthentication": {
+            "Customer": {
+                "FirstName": "John",
+                "LastName": "Doe",
+                "Email": "testing2@test.com",
+                "SocialSecurityNumber": "00003456789"
+            },
+            "BillingAddress": {
+                "Country": "BR"
+            },
+            "Card": {
+                "HolderName": "John Doe",
+                "Number": "4111111111111111",
+                "ExpirationMonth": "02",
+                "ExpirationYear": "2029",
+                "SecurityCode": "312"
+            }
+        }
+    };
+
+(() => {
+    tokenizeCard({
+    "apiKey": 'MzAwMDc6MzUyZmU1MGQtMGNkYS00YWFmLTllY2QtN2M3NzI2MDg3ZDliLTM5Njg=', 
+    "environment": 'test',
+    "cardDetails": JSON.stringify(x),
+    "handleRequest": handleRequest,
+    "handleError": handleError,
+});
+})();
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>
