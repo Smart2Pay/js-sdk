@@ -11,7 +11,7 @@ Import the following script that will make available `tokanizeCard()`:
 
 ## Usage
 
-Create a function where you handle the received credit card token:
+Create a function where you handle the received `CreditCardToken`:
 ```javascript
 // usage:
 function handleRequest(CreditCardToken) {
@@ -28,7 +28,7 @@ function handleError(HttpStatusCode, errorText) {
 }
 ```
 
-Use `tokanizeCard()` to send required data and make `CreditCardToken` to 
+Use `tokanizeCard()` to send the required data and handlers:
 <pre lang="javascript">
 tokanizeCard({
     apiKey: '&lt;𝘢𝘱𝘪𝘬𝘦𝘺 𝘴𝘵𝘳𝘪𝘯𝘨&gt;', 
