@@ -5,6 +5,7 @@ Javascript API to obtain the `CreditCardToken`
 - [ES5](#es5-implementation)
 - [Promises](#promises-implementation)
 
+---
 
 ## ES5 implementation
 
