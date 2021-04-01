@@ -37,7 +37,7 @@ tokanizeCard({
     "handleRequest": <*handleRequest callback*>,
     "handleError": <*handleError callback*>,
 });
-</p>
+</pre>
 
 | Parameter         | Type          | Possible Values                       | Description                                   |
 | :---              | :---:         | :---                                  | :---                                          |
