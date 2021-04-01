@@ -111,3 +111,27 @@ tokenizeCard_promise({
 | `apiKey`          | string        |                                       | API key previously obtained from S2P server   |
 | `environment`     | string        | **'DEBUG'**<br />**'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
 | `cardDetails`     | JSON object   | check sample bellow  | card authentication details in JSON format |
+
+Sample card details object:
+```json
+{
+    "CardAuthentication": {
+        "Customer": {
+            "FirstName": "John",
+            "LastName": "Doe",
+            "Email": "testing2@test.com",
+            "SocialSecurityNumber": "00003456789"
+        },
+        "BillingAddress": {
+            "Country": "BR"
+        },
+        "Card": {
+            "HolderName": "John Doe",
+            "Number": "4111111111111111",
+            "ExpirationMonth": "02",
+            "ExpirationYear": "2029",
+            "SecurityCode": "312"
+        }
+    }
+}
+```
