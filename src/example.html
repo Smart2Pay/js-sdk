@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        const cardDetailsObject = {
+            "CardAuthentication": {
+                "Customer": {
+                    "FirstName": "John",
+                    "LastName": "Doe",
+                    "Email": "testing2@test.com",
+                    "SocialSecurityNumber": "00003456789"
+                },
+                "BillingAddress": {
+                    "Country": "BR"
+                },
+                "Card": {
+                    "HolderName": "John Doe",
+                    "Number": "4111111111111111",
+                    "ExpirationMonth": "02",
+                    "ExpirationYear": "2029",
+                    "SecurityCode": "312"
+                }
+            }
+        };
+
+        const apiKey = 'MzAwMDc6ZDIxMWM2NmQtMDU5Ni00MDQxLTkzYWEtMDYwMjY0MTFmMWZhLTk3MjQ=';
+    </script>
+
+    <script>
+        function tokenizeCard(paramsObj) {
+            "use strict";
+
+            var apiKey = paramsObj.apiKey;
+            var environment = paramsObj.environment;
+            var postData = JSON.stringify(paramsObj.cardDetails);
+            var callback = paramsObj.handleRequest;
+            var errCallback = paramsObj.handleError;
+            const url = (function (env) {
+                switch (env) {
+                    case 'DEBUG': return 'https://httpbin.org/post';
+                    case 'DEV': return 'http://localhost/v1/card/authenticate';
+                    case 'LIVE': return 'https://secure.smart2pay.com/v1/card/authenticate';
+                    case 'TEST':
+                    default: return 'https://securetest.smart2pay.com/v1/card/authenticate';
+                }
+            })(paramsObj.environment);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Authorization', 'Basic ' + apiKey);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                if ([200, 201].indexOf(xhr.status) === -1) {
+                    errCallback(xhr.status, xhr.statusText);
+                    return;
+                }
+
+                try {
+                    var token = JSON.parse(xhr.responseText).CardAuthentication.CreditCardToken.Value;
+                    callback(token);
+                }
+                catch {
+                    errCallback(500, 'reponse object not ok');
+                }
+            }
+            if (xhr.readyState === XMLHttpRequest.DONE) return;
+            xhr.send(postData);
+        };
+    </script>
+
+    <script>
+        // USAGE:
+
+        function handleRequest(CreditCardToken) {
+            // use received 'CreditCardToken'
+            console.log('ES5 implementation : ', CreditCardToken);
+        }
+
+        function handleError(HttpStatusCode, errorText) {
+            // handle error
+            console.error('Error : ', HttpStatusCode, errorText);
+        }
+
+        (() => {
+            tokenizeCard({
+                'apiKey': apiKey,
+                'environment': 'TEST', //  DEBUG | DEV | TEST | LIVE
+                'cardDetails': cardDetailsObject,
+                'handleRequest': handleRequest,
+                'handleError': handleError,
+            });
+        })();
+    </script>
+
+
+    <script>
+        function tokenizeCard_promise(paramsObj) {
+            const apiKey = paramsObj.apiKey;
+            const postData = JSON.stringify(paramsObj.cardDetails);
+            const url = (env => {
+                switch (env) {
+                    case 'DEBUG': return 'https://httpbin.org/post';
+                    case 'DEV': return 'http://localhost/v1/card/authenticate';
+                    case 'LIVE': return 'https://secure.smart2pay.com/v1/card/authenticate';
+                    case 'TEST':
+                    default: return 'https://securetest.smart2pay.com/v1/card/authenticate';
+                }
+            })(paramsObj.environment);
+
+            return new Promise(function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', url, true);
+                xhr.setRequestHeader('Authorization', 'Basic ' + apiKey);
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                xhr.onload = function () {
+                    if ([200, 201].indexOf(xhr.status) === -1) {
+                        reject({ status: xhr.status, statusText: xhr.statusText });
+                    }
+
+                    try {
+                        const token = JSON.parse(xhr.responseText).CardAuthentication.CreditCardToken.Value;
+                        if (!token)
+                            reject({ status: 500, statusText: 'Token not found inside response object' });
+                        else
+                            resolve(token);
+                    }
+                    catch {
+                        reject({ status: 500, statusText: 'Reponse object not ok' });
+                    }
+                };
+                xhr.onerror = function () {
+                    reject({ status: xhr.status, statusText: xhr.statusText });
+                };
+                xhr.send(postData);
+            });
+        }
+    </script>
+    <script>
+        // USAGE:
+
+        (() => {
+            tokenizeCard_promise({
+                apiKey: apiKey,
+                environment: 'TEST', //  DEBUG | DEV | TEST | LIVE
+                cardDetails: cardDetailsObject
+            })
+                .then(function (CreditCardToken) {
+                    // use received 'CreditCardToken'
+                    console.log('Promise implementation: ', CreditCardToken);
+                })
+                .catch(function (err) {
+                    console.error('Error : ', err.status, err.statusText);
+                })
+        })();
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -80,4 +80,28 @@ Sample card details object:
 
 ## Promises Implementation
 
-***< to do >***
+### Installation
+
+Import the following script that will make available `tokanizeCard()`:
+```html
+<script src="https://..../tokenizeCard.js" type="text/javascript"></script>
+```
+
+### Usage
+
+Use `tokanizeCard_promise` to send the required data and handle response / error:
+<pre lang="javascript">
+tokenizeCard_promise({
+    apiKey: '&lt;𝘢𝘱𝘪𝘬𝘦𝘺 𝘴𝘵𝘳𝘪𝘯𝘨&gt;',
+    environment: '&lt;𝘦𝘯𝘷𝘪𝘳𝘰𝘯𝘮𝘦𝘯𝘵 𝘴𝘵𝘳𝘪𝘯𝘨&gt;',
+    cardDetails: '&lt;𝘤𝘢𝘳𝘥𝘋𝘦𝘵𝘢𝘪𝘭𝘴 𝘰𝘣𝘫𝘦𝘤𝘵&gt;',
+})
+    .then(function (CreditCardToken) {
+        // use received 'CreditCardToken'
+        console.log('Promise implementation: ', CreditCardToken);
+    })
+    .catch(function (err) {
+        // handle error
+        console.error('Error : ', err.status, err.statusText);
+    });
+</pre>

@@ -2,27 +2,18 @@ function tokenizeCard(paramsObj) {
     "use strict";
 
     var apiKey = paramsObj.apiKey;
-    var environment = paramsObj.environment;
     var postData = JSON.stringify(paramsObj.cardDetails);
     var callback = paramsObj.handleRequest;
     var errCallback = paramsObj.handleError;
-
-    var url = '';
-    switch (environment) {
-        case 'DEBUG':
-            url = 'https://httpbin.org/post';
-            break;
-        case 'DEV':
-            url = 'http://localhost/v1/card/authenticate';
-            break;
-        case 'LIVE':
-            url = 'https://secure.smart2pay.com/v1/card/authenticate';
-            break;
-        case 'TEST':
-        default:
-            url = 'https://securetest.smart2pay.com/v1/card/authenticate';
-            break;
-    }
+    const url = (function (env) {
+        switch (env) {
+            case 'DEBUG': return 'https://httpbin.org/post';
+            case 'DEV': return 'http://localhost/v1/card/authenticate';
+            case 'LIVE': return 'https://secure.smart2pay.com/v1/card/authenticate';
+            case 'TEST':
+            default: return 'https://securetest.smart2pay.com/v1/card/authenticate';
+        }
+    })(paramsObj.environment);
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
@@ -32,39 +23,21 @@ function tokenizeCard(paramsObj) {
         if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
         if ([200, 201].indexOf(xhr.status) === -1) {
-            errCallback(xhr.status, 'HTTP error... ' + xhr.statusText);
+            errCallback(xhr.status, xhr.statusText);
             return;
         }
 
         try {
             var token = JSON.parse(xhr.responseText).CardAuthentication.CreditCardToken.Value;
-            callback(token);
+            if (!token)
+                errCallback(500, 'Token not found inside response');
+            else
+                callback(token);
         }
         catch {
-            errCallback(500, 'reponse object not ok');
+            errCallback(500, 'Reponse object not ok');
         }
     }
     if (xhr.readyState === XMLHttpRequest.DONE) return;
     xhr.send(postData);
 };
-
-
-// USAGE:
-
-function handleRequest(CreditCardToken) {
-    // use received 'CreditCardToken'
-    console.log(CreditCardToken);
-}
-
-function handleError(HttpStatusCode, errorText) {
-    // handle error
-    console.log(HttpStatusCode, errorText);
-}
-
-tokenizeCard({
-    "apiKey": apiKey,
-    "environment": environment,
-    "cardDetails": cardDetails,
-    "handleRequest": handleRequest,
-    "handleError": handleError,
-});
