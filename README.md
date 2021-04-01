@@ -84,7 +84,7 @@ Sample card details object:
 
 Import the following script that will make available `tokanizeCard()`:
 ```html
-<script src="https://..../tokenizeCard.js" type="text/javascript"></script>
+<script src="https://..../tokenizeCard_promise.js" type="text/javascript"></script>
 ```
 
 ### Usage
