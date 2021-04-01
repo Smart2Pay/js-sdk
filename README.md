@@ -4,7 +4,7 @@ Javascript API to obtain the `CreditCardToken`
 
 - [ES5](#es5-implementation)
 - [Promises](#promises-implementation)
-<br />
+
 
 ## ES5 implementation
 
@@ -29,7 +29,7 @@ Create a function to handle any received errors:
 ```javascript
 function handleError(HttpStatusCode, errorText) {
     // handle error
-    console.log(HttpStatusCode, errorText);
+    console.error(HttpStatusCode, errorText);
 }
 ```
 
@@ -98,10 +98,16 @@ tokenizeCard_promise({
 })
     .then(function (CreditCardToken) {
         // use received 'CreditCardToken'
-        console.log('Promise implementation: ', CreditCardToken);
+        console.log(CreditCardToken);
     })
     .catch(function (err) {
         // handle error
-        console.error('Error : ', err.status, err.statusText);
+        console.error(err.status, err.statusText);
     });
 </pre>
+
+| Parameter         | Type          | Possible Values                       | Description                                   |
+| :---              | :---:         | :---                                  | :---                                          |
+| `apiKey`          | string        |                                       | API key previously obtained from S2P server   |
+| `environment`     | string        | **'DEBUG'**<br />**'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
+| `cardDetails`     | JSON object   | check sample bellow  | card authentication details in JSON format |
