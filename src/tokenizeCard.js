@@ -10,49 +10,47 @@ function tokenizeCard(paramsObj) {
     var url = '';
     switch (environment) {
         case 'DEBUG':
-        case 'debug':
-            url = 'https://jsonplaceholder.typicode.com/posts/1';
+            url = 'https://httpbin.org/post';
             break;
         case 'DEV':
-        case 'dev':
             url = 'http://localhost/v1/card/authenticate';
             break;
         case 'LIVE':
-        case 'live':
             url = 'https://secure.smart2pay.com/v1/card/authenticate';
             break;
         case 'TEST':
-        case 'test':
         default:
             url = 'https://securetest.smart2pay.com/v1/card/authenticate';
             break;
     }
 
-    var req = new XMLHttpRequest();
-    if (!req) {
-        errCallback(400, 'XMLHttpRequest() object missing! Is JavaScript enabled?');
-        return;
-    }
-    req.open('POST', url, true);
-    req.setRequestHeader('Authorization', 'Basic ' + apiKey);
-    if (postData)
-        req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-    req.onreadystatechange = function () {
-        if (req.readyState != XMLHttpRequest.DONE) return;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Authorization', 'Basic ' + apiKey);
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
-        if ([200, 201].indexOf(req.status) === -1) {
-            errCallback(req.status, 'HTTP error...');
+        if ([200, 201].indexOf(xhr.status) === -1) {
+            errCallback(xhr.status, 'HTTP error... ' + xhr.statusText);
             return;
         }
 
-        callback(JSON.parse(req.responseText).CardAuthentication.CreditCardToken.Value);
+        try {
+            var token = JSON.parse(xhr.responseText).CardAuthentication.CreditCardToken.Value;
+            callback(token);
+        }
+        catch {
+            errCallback(500, 'reponse object not ok');
+        }
     }
-    if (req.readyState == 4) return;
-    req.send(postData);
+    if (xhr.readyState === XMLHttpRequest.DONE) return;
+    xhr.send(postData);
 };
 
 
-// usage:
+// USAGE:
+
 function handleRequest(CreditCardToken) {
     // use received 'CreditCardToken'
     console.log(CreditCardToken);
@@ -64,7 +62,7 @@ function handleError(HttpStatusCode, errorText) {
 }
 
 tokenizeCard({
-    "apiKey": apiKey, 
+    "apiKey": apiKey,
     "environment": environment,
     "cardDetails": cardDetails,
     "handleRequest": handleRequest,
