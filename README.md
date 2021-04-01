@@ -31,7 +31,7 @@ function handleError(HttpStatusCode, errorText) {
 Use `tokanizeCard()` to send required data and make `CreditCardToken` to 
 ```javascript
 tokanizeCard({
-    "apiKey": <*apikey string*>, 
+    "apiKey": <<em>apikey string</em>>, 
     "environment": <*environment string*>,
     "cardDetails": <*card details object*>,
     "handleRequest": <*handleRequest callback*>,
