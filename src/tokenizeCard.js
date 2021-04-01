@@ -9,7 +9,8 @@ function tokenizeCard(paramsObj) {
 
     var url = '';
     switch (environment) {
-        case '--':
+        case 'DEBUG':
+        case 'debug':
             url = 'https://jsonplaceholder.typicode.com/posts/1';
             break;
         case 'DEV':
