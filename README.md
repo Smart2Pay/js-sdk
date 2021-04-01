@@ -13,7 +13,6 @@ Import the following script that will make available `tokanizeCard()`:
 
 Create a function where you handle the received `CreditCardToken`:
 ```javascript
-// usage:
 function handleRequest(CreditCardToken) {
     // use received 'CreditCardToken'
     console.log(CreditCardToken);
