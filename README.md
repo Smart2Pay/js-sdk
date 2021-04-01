@@ -83,7 +83,7 @@ Sample card details object:
 
 ### Installation
 
-Import the following script that will make available `tokanizeCard()`:
+Import the following script that will make available `tokanizeCard_promise()`:
 ```html
 <script src="https://..../tokenizeCard_promise.js" type="text/javascript"></script>
 ```
