@@ -2,14 +2,20 @@
 
 Javascript API to obtain the `CreditCardToken`
 
-## Installation
+- [ES5](#es5-implementation)
+- [Promises](#promises-implementation)
+<br />
+
+## ES5 implementation
+
+### Installation
 
 Import the following script that will make available `tokanizeCard()`:
 ```html
 <script src="https://..../tokenizeCard.js" type="text/javascript"></script>
 ```
 
-## Usage
+### Usage
 
 Create a function where you handle the received `CreditCardToken`:
 ```javascript
@@ -69,3 +75,9 @@ Sample card details object:
     }
 }
 ```
+
+<br />
+
+## Promises Implementation
+
+***< to do >***
