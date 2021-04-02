@@ -24,9 +24,10 @@
             }
         };
 
-        const apiKey = 'MzAwMDc6ZDIxMWM2NmQtMDU5Ni00MDQxLTkzYWEtMDYwMjY0MTFmMWZhLTk3MjQ=';
+        const apiKey = 'MzAwMDc6MTZmNWJjYzktODFlOS00MzJkLWFkNDctNjU3YzEzYzE5N2I2LTQ5ODg=';
     </script>
 
+    <!-- ES5 implementation example: -->
     <script>
         function tokenizeCard(paramsObj) {
             "use strict";
@@ -49,7 +50,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Authorization', 'Basic ' + apiKey);
-            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
@@ -84,18 +85,16 @@
             console.error('Error : ', HttpStatusCode, errorText);
         }
 
-        (() => {
-            tokenizeCard({
-                'apiKey': apiKey,
-                'environment': 'TEST', //  DEBUG | DEV | TEST | LIVE
-                'cardDetails': cardDetailsObject,
-                'handleRequest': handleRequest,
-                'handleError': handleError,
-            });
-        })();
+        tokenizeCard({
+            'apiKey': apiKey,
+            'environment': 'TEST', //  DEBUG | DEV | TEST | LIVE
+            'cardDetails': cardDetailsObject,
+            'handleRequest': handleRequest,
+            'handleError': handleError,
+        });
     </script>
 
-
+    <!-- Promises implementation example: -->
     <script>
         function tokenizeCard_promise(paramsObj) {
             const apiKey = paramsObj.apiKey;
@@ -114,7 +113,7 @@
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', url, true);
                 xhr.setRequestHeader('Authorization', 'Basic ' + apiKey);
-                xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
                 xhr.onload = function () {
                     if ([200, 201].indexOf(xhr.status) === -1) {
                         reject({ status: xhr.status, statusText: xhr.statusText });
@@ -140,22 +139,86 @@
     </script>
     <script>
         // USAGE:
+        let paramsObjToSend_forPromise = {
+            apiKey: apiKey,
+            environment: 'TEST', //  DEBUG | DEV | TEST | LIVE
+            cardDetails: cardDetailsObject
+        };
 
-        (() => {
-            tokenizeCard_promise({
-                apiKey: apiKey,
-                environment: 'TEST', //  DEBUG | DEV | TEST | LIVE
-                cardDetails: cardDetailsObject
+        tokenizeCard_promise(paramsObjToSend_forPromise)
+            .then(CreditCardToken => {
+                // use received 'CreditCardToken'
+                console.log('Promise implementation: ', CreditCardToken);
             })
-                .then(function (CreditCardToken) {
-                    // use received 'CreditCardToken'
-                    console.log('Promise implementation: ', CreditCardToken);
-                })
-                .catch(function (err) {
-                    console.error('Error : ', err.status, err.statusText);
-                })
-        })();
+            .catch(err => {
+                // handle error
+                console.error('Error : ', err.status, err.statusText);
+            })
     </script>
+
+    <!-- fetch implementation example: -->
+    <script>
+        async function tokenizeCard_fetch(paramsObj) {
+            const apiKey = paramsObj.apiKey;
+            const postData = JSON.stringify(paramsObj.cardDetails);
+
+            const url = (env => {
+                switch (env) {
+                    case 'DEBUG': return 'https://httpbin.org/post';
+                    case 'DEV': return 'http://localhost/v1/card/authenticate';
+                    case 'LIVE': return 'https://secure.smart2pay.com/v1/card/authenticate';
+                    case 'TEST':
+                    default: return 'https://securetest.smart2pay.com/v1/card/authenticate';
+                }
+            })(paramsObj.environment);
+
+            const request = new Request(url, {
+                method: 'POST',
+                mode: 'cors', //https://developer.mozilla.org/en-US/docs/Web/API/Request/mode
+                cache: 'no-cache',
+                credentials: 'same-origin', //https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': 'Basic ' + apiKey
+                },
+                body: postData
+            });
+
+            const CreditCardTokenPromise = await fetch(request)
+                .then(response => {
+                    if (!response.ok) {
+                        return Promise.reject({ status: response.status, statusText: response.statusText });
+                    }
+                    return response.json();
+                })
+                .then(responseJson => {
+                    try {
+                        const token = responseJson.CardAuthentication.CreditCardToken.Value;
+                        if (!token)
+                            return Promise.reject({ status: 500, statusText: 'Token not found inside response object' });
+                        else
+                            return token;
+                    }
+                    catch {
+                        return Promise.reject({ status: 500, statusText: 'Reponse object not ok' });
+                    }
+                });
+
+            return CreditCardTokenPromise;
+        }
+    </script>
+    <script>
+        let paramsObjToSend_forFetch = {
+            apiKey: apiKey,
+            environment: 'TEST', //  DEBUG | DEV | TEST | LIVE
+            cardDetails: cardDetailsObject
+        };
+
+        tokenizeCard_fetch(paramsObjToSend_forFetch)
+            .then(CreditCardToken => console.log('Fetch implementation: ', CreditCardToken))
+            .catch(err => console.error('Error : ', err.status, err.statusText))
+    </script>
+
 </head>
 
 <body>

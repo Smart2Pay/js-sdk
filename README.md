@@ -1,9 +1,12 @@
 # js-sdk
 
-Javascript API to obtain the `CreditCardToken`
+Several JavaScript API implementations to obtain the `CreditCardToken`:
 
-- [ES5](#es5-implementation)
-- [ES6 - Promises](#promises-implementation)
+- [ES5 - `XMLHttpRequest`](#es5-implementation)
+- [ES6 - `Promise` + `XMLHttpRequest`](#promises-implementation)
+- [ES6 - `fetch` + `Promise`](#fetch-implementation)
+
+Check the [examples page](src/example.html) for more info.
 
 ---
 
@@ -48,7 +51,7 @@ tokanizeCard({
 | Parameter         | Type          | Possible Values                       | Description                                   |
 | :---              | :---:         | :---                                  | :---                                          |
 | `apiKey`          | string        |                                       | API key previously obtained from S2P server   |
-| `environment`     | string        | **'DEBUG'**<br />**'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
+| `environment`     | string        | **'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
 | `cardDetails`     | JSON object   | check sample bellow  | card authentication details in JSON format |
 | `handleRequest`   | JavaScript function   |   | a Javascript function that will receive `CreditCardToken` as a parameter |
 | `handleError`     | JavaScript function   |   | a Javascript function that will receive an error code: `HttpStatusCode` and `errorText` parameters |
@@ -83,7 +86,7 @@ Sample card details object:
 
 ### Installation
 
-Import the following script that will make available `tokanizeCard_promise()`:
+Import the following script that will make available `tokanizeCard()`:
 ```html
 <script src="https://..../tokenizeCard_promise.js" type="text/javascript"></script>
 ```
@@ -110,7 +113,61 @@ tokenizeCard_promise({
 | Parameter         | Type          | Possible Values                       | Description                                   |
 | :---              | :---:         | :---                                  | :---                                          |
 | `apiKey`          | string        |                                       | API key previously obtained from S2P server   |
-| `environment`     | string        | **'DEBUG'**<br />**'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
+| `environment`     | string        | **'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
+| `cardDetails`     | JSON object   | check sample bellow  | card authentication details in JSON format |
+
+Sample card details object:
+```json
+{
+    "CardAuthentication": {
+        "Customer": {
+            "FirstName": "John",
+            "LastName": "Doe",
+            "Email": "testing2@test.com",
+            "SocialSecurityNumber": "00003456789"
+        },
+        "BillingAddress": {
+            "Country": "BR"
+        },
+        "Card": {
+            "HolderName": "John Doe",
+            "Number": "4111111111111111",
+            "ExpirationMonth": "02",
+            "ExpirationYear": "2029",
+            "SecurityCode": "312"
+        }
+    }
+}
+```
+
+<br />
+
+## Fetch Implementation
+
+### Installation
+
+Import the following script that will make available `tokenizeCard_fetch()`:
+```html
+<script src="https://..../tokenizeCard_fetch.js" type="text/javascript"></script>
+```
+
+### Usage
+
+Use `tokenizeCard_fetch` promise to send the required data and handle response / error:
+<pre lang="javascript">
+tokenizeCard_fetch({
+    apiKey: '&lt;𝘢𝘱𝘪𝘬𝘦𝘺 𝘴𝘵𝘳𝘪𝘯𝘨&gt;',
+    environment: '&lt;𝘦𝘯𝘷𝘪𝘳𝘰𝘯𝘮𝘦𝘯𝘵 𝘴𝘵𝘳𝘪𝘯𝘨&gt;',
+    cardDetails: '&lt;𝘤𝘢𝘳𝘥𝘋𝘦𝘵𝘢𝘪𝘭𝘴 𝘰𝘣𝘫𝘦𝘤𝘵&gt;',
+})
+    .then(CreditCardToken => console.log(CreditCardToken))
+    .catch(err => console.error(err))
+</pre>
+
+| Parameter         | Type          | Possible Values                       | Description                                   |
+| :---              | :---:         | :---                                  | :---                                          |
+| `apiKey`          | string        |                                       | API key previously obtained from S2P server   |
+| `environment`     | string        | **'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
 | `cardDetails`     | JSON object   | check sample bellow  | card authentication details in JSON format |
 
 Sample card details object:

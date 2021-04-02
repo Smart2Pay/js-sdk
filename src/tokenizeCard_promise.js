@@ -1,9 +1,9 @@
 function tokenizeCard_promise(paramsObj) {
+    "use strict";
     const apiKey = paramsObj.apiKey;
     const postData = JSON.stringify(paramsObj.cardDetails);
     const url = (env => {
         switch (env) {
-            case 'DEBUG': return 'https://httpbin.org/post';
             case 'DEV': return 'http://localhost/v1/card/authenticate';
             case 'LIVE': return 'https://secure.smart2pay.com/v1/card/authenticate';
             case 'TEST':

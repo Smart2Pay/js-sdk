@@ -7,7 +7,6 @@ function tokenizeCard(paramsObj) {
     var errCallback = paramsObj.handleError;
     const url = (function (env) {
         switch (env) {
-            case 'DEBUG': return 'https://httpbin.org/post';
             case 'DEV': return 'http://localhost/v1/card/authenticate';
             case 'LIVE': return 'https://secure.smart2pay.com/v1/card/authenticate';
             case 'TEST':
