@@ -54,8 +54,8 @@ tokanizeCard({
 | `apiKey`          | string        |                                       | API key previously obtained from S2P server   |
 | `environment`     | string        | **'DEV'**<br />**'TEST'**<br />**'LIVE'** | select the environment <br /><ul><li>DEV <br />`http://localhost/v1/card/authenticate`</li><li>TEST <br />`https://securetest.smart2pay.com/v1/card/authenticate`</li><li>LIVE <br />`https://secure.smart2pay.com/v1/card/authenticate`</li></ul>    |
 | `cardDetails`     | JSON object   | check sample bellow  | card authentication details in JSON format |
-| `handleRequest`   | JavaScript function   |   | a Javascript function that will receive `CreditCardToken` as a parameter |
-| `handleError`     | JavaScript function   |   | a Javascript function that will receive an error code: `HttpStatusCode` and `errorText` parameters |
+| `handleRequest`   | callback function   |   | a Javascript function that will receive `CreditCardToken` as a parameter |
+| `handleError`     | callback function   |   | a Javascript function that will receive an error code: `HttpStatusCode` and `errorText` parameters |
 
 Sample card details object:
 ```json
