@@ -6,10 +6,11 @@ Several JavaScript API implementations to obtain the `CreditCardToken`:
 - [ES6 - `Promise` + `XMLHttpRequest`](#promises-implementation)
 - [ES6 - `fetch` + `Promise`](#fetch-implementation)
 
-Check the [examples page](src/example.html) for more info.
+Check the [examples page](src/example.html) for more info.<br /><br />
 
 ---
 
+<br /><br />
 ## ES5 implementation
 
 ### Installation
@@ -80,8 +81,7 @@ Sample card details object:
 }
 ```
 
-<br />
-
+<br /><br />
 ## Promises Implementation
 
 ### Installation
@@ -140,8 +140,7 @@ Sample card details object:
 }
 ```
 
-<br />
-
+<br /><br />
 ## Fetch Implementation
 
 ### Installation
