@@ -62,7 +62,7 @@ Sample card details object:
     }
 }
 ```
-
+---
 <br /><br />
 ## Promises Implementation
 
@@ -121,7 +121,7 @@ Sample card details object:
     }
 }
 ```
-
+---
 <br /><br />
 ## ES5 implementation
 
